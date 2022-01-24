@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Job Search</title>
+  <!-- UIkit CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.10.1/dist/css/uikit.min.css" />
+
+  <!-- UIkit JS -->
+  <script src="https://cdn.jsdelivr.net/npm/uikit@3.10.1/dist/js/uikit.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/uikit@3.10.1/dist/js/uikit-icons.min.js"></script>
+</head>
+
+<body>
+  <div class="uk-flex-column uk-text-center">
+    <h1 class="uk-margin-top-large uk-heading-medium">Search Results</h1>
+    <div class="uk-text-large uk-container">{{resultsNumber}} {{ searchingBy }} jobs found.</div>
+    <div class="uk-container uk-margin">
+      <a class="uk-link-text uk-margin-right" href="/">← Go back</a>
+      <div class="uk-button-group">
+          <button class="uk-button uk-button-default">EXPORT TO CSV</button>
+          <div class="uk-inline">
+              <button class="uk-button uk-button-default" type="button"><span uk-icon="icon:  triangle-down"></span></button>
+              <div uk-dropdown="mode: click; boundary: ! .uk-button-group; boundary-align: true;">
+                  <ul class="uk-nav uk-dropdown-nav">
+                      <li class="uk-active"><a href="/export?word={{ searchingBy }}&site=all">All Site</a></li>
+                      <li class="uk-active"><a href="/export?word={{ searchingBy }}&site=WWR">WWR</a></li>
+                      <li class="uk-active"><a href="/export?word={{ searchingBy }}&site=Stackoverflow">Stackoverflow</a></li>
+                      <li class="uk-active"><a href="/export?word={{ searchingBy }}&site=Remoteok">RemoteOK</a></li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    
+    <div class="uk-margin-large-bottom uk-margin-large-left uk-margin-large-right">
+      <div class="uk-child-width-1-3@s uk-margin-remove" uk-grid>
+        {% for site, values in jobs.items() %}
+          <div class="uk-panel uk-padding-remove">
+              <div uk-height-viewport class="uk-width-auto uk-panel-scrollable">
+                <p class="uk-text-bold uk-text-large uk-container uk-margin-remove">{{ site }}</p>
+                {% for job in values %}
+                <div class="uk-text-left uk-card uk-card-hover uk-card-body uk-card-default uk-card-small uk-margin">
+                  <h3 class="uk-card-title uk-text-lead uk-text-bold">{{ job.title }}</h3>
+                  <p class="uk-text-small">{{ job.company }}</p>
+                  <a class="uk-button uk-button-primary" href="{{job.link}}" target="_blank">Apply</a>
+                </div>
+                {% endfor %}
+              </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+</body>
+
+</html>

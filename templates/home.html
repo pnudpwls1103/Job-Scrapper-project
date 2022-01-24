@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Search Jobs</title>
+<!-- UIkit CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.10.1/dist/css/uikit.min.css" />
+
+<!-- UIkit JS -->
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.10.1/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.10.1/dist/js/uikit-icons.min.js"></script>
+<style>
+</style>
+</head>
+
+<body>
+    <div class="uk-text-center uk-flex-column uk-position-center">
+      <h1 class="uk-heading-large">Search Jobs</h1>
+      <p class="uk-text-large">Search by term:</p>
+      <form action="/report" method="get">
+        <input class="uk-input uk-form-large uk-form-width-large" type="text" placeholder="i.e python" required name = "word"/>
+        <button class="uk-button uk-button-primary uk-button-large "><span uk-icon="icon: search; ratio: 1"></span><span class="uk-text-default">  search</span></button>
+      </form>    
+    </div>
+  </div>
+</body>
+</html>
