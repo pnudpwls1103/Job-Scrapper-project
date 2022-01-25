@@ -1,6 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
+import concurrent.futures
+import asyncio
+from functools import partial
 
+jobs = []
 
 def get_last_page(url):
   try:
@@ -34,24 +38,35 @@ def extract_job(html):
     }
 
 
-def extract_jobs(last_page, url):
-    jobs = []
+async def extract_jobs(page, url):
+    global jobs
+    
     try:
-      for page in range(last_page):
-          print(f'<<Scrapping page Stackoverflow-{page}>>')
-          result = requests.get(f'{url}&pg={page+1}')
-          soup = BeautifulSoup(result.text, "html.parser")
-          results = soup.find_all("div", {"class": "js-result"})
-          for result in results:
-              job = extract_job(result)
-              jobs.append(job)
+      print(f'<<Scrapping page Stackoverflow-{page}>>')
+      result = requests.get(f'{url}&pg={page+1}')
+      soup = BeautifulSoup(result.text, "html.parser")
+      results = soup.find_all("div", {"class": "js-result"})
+      for result in results:
+          job = extract_job(result)
+          jobs.append(job)
     except:
       pass
-    return jobs
+    # return jobs
 
+async def main(last_page, url):
+    await asyncio.wait([extract_jobs(page, url) for page in range(last_page)])
 
 def get_jobs(word):
+    global jobs
+    jobs = []
     url = f"https://stackoverflow.com/jobs?q={word}"
     last_page = get_last_page(url)
-    jobs = extract_jobs(last_page, url)
+    
+    asyncio.run(main(last_page, url))
+
+    # with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
+    #   results = [executor.submit(extract_jobs, page, url) for page in range(1, last_page + 1)]
+
+    # for result in results:
+    #   jobs += result.result()
     return jobs

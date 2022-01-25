@@ -26,9 +26,10 @@ scrapper = {
 }
 
 def scrapping(word):
-  for site, func in scrapper.item():
-      jobs = {}
-      jobs[site] = exec(func)
+  jobs = {}
+  for site, func in scrapper.items(): 
+    result = eval(func)
+    jobs[site] = result
   return jobs
 
 @app.route("/")
@@ -47,13 +48,13 @@ def report():
         else:
             start_time = time.time()
             db[word] = scrapping(word)
+            jobs = db[word]
             end_time = time.time()
-        number = len(jobs['WWR']) + len(jobs['Stackoverflow']) + len(
-            jobs['Remoteok'])
+            print(end_time - start_time)
+        number = len(jobs['WWR']) + len(jobs['Stackoverflow']) + len(jobs['Remoteok'])
     else:
         return redirect("/")
-
-    print(end_time - start_time)
+    
     return render_template("report.html",
                            searchingBy=word,
                            resultsNumber=number,
